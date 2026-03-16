@@ -3,7 +3,7 @@ name: Stoksmart deployment
 on:
   push:
     branches:
-      - dev
+      - main
     paths:
       - '**'
   workflow_dispatch:
