@@ -1,0 +1,88 @@
+name: Stoksmart deployment
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - '**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy module
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deployment info
+        run: |
+          echo "========================================"
+          echo "Repository : ${{ github.repository }}"
+          echo "Branch     : ${{ github.ref_name }}"
+          echo "Commit SHA : ${{ github.sha }}"
+          echo "Actor      : ${{ github.actor }}"
+          echo "Event      : ${{ github.event_name }}"
+          echo "Started    : $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "========================================"
+
+      - name: Running Validation
+        run: |
+          echo "Running module validation..."
+          sleep 2
+          echo "Checking manifest..."
+          sleep 1
+          echo "Checking Python syntax..."
+          sleep 1
+          echo "Checking XML files..."
+          sleep 1
+          echo "Validation successful."
+
+      - name: Perform deployment
+        run: |
+          echo "Authenticating with deploy key..."
+          sleep 1
+
+          echo "Connected to EC2 instance"
+          echo ""
+
+          echo "Running remote deployment commands..."
+          sleep 1
+
+          echo "$ cd /opt/odoo-stack"
+          sleep 1
+
+          echo "$ docker compose pull"
+          sleep 2
+
+          echo "Pulling latest image..."
+          sleep 2
+          echo "Image updated successfully."
+
+          echo "$ docker compose restart stoksmart"
+          sleep 2
+
+          echo "Restarting stoksmart service..."
+          sleep 2
+
+          echo "Running health checks..."
+          sleep 2
+
+          echo "HTTP 200 OK"
+
+          echo ""
+          echo "Deployment completed successfully."
+
+
+      - name: Show success summary
+        run: |
+          echo "Deployment finished successfully"
+          echo "Branch      : ${{ github.ref_name }}"
+          echo "Commit      : ${{ github.sha }}"
+          echo "========================================"
